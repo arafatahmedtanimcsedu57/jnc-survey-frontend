@@ -77,43 +77,45 @@ export function responseSingleSurveyConvertForm(input: FormRequestType) {
     formName: input.name,
     file: input.pdf,
     creator: 'Test User',
-    formLayoutComponents: input?.questions?.map((block, index) => ({
-      container: {
-        id: index, // block.id bhai,
-        controlName: 'step-container',
-        displayText: 'Block',
-        itemType: 'container',
-        icon: 'fa fa-building',
-        heading: block.title,
-        subHeading: '',
-        skipAble: block.skipAble,
-        type: 'INPUT',
-      },
-      children: block?.fields?.map((field, index) => ({
-        id: index, // field.id bhai,
-        controlName: convertControlName(field.type),
-        displayText: field.label,
-        description: field.information || '',
-        placeholder: field.placeholder || '',
-        labelName: field.label,
-        itemType: 'control',
-        icon: getIconForControl(field.type),
-        required: field.required,
-        category: getCategoryForControl(field.type),
-        containerId: field.id,
-        name: field.name,
-        sequence: field.sequence,
-        ...(field.options
-          ? {
-              items: field.options.map((option) => ({
-                id: option.id,
-                value: option.value,
-                label: option.label,
-              })),
-            }
-          : {}),
-      })),
-    })),
+    formLayoutComponents: Array.isArray(input?.questions)
+      ? input?.questions?.map((block, index) => ({
+          container: {
+            id: index, // block.id bhai,
+            controlName: 'step-container',
+            displayText: 'Block',
+            itemType: 'container',
+            icon: 'fa fa-building',
+            heading: block.title || '',
+            subHeading: '',
+            skipAble: block.skipAble || false,
+            type: 'INPUT',
+          },
+          children: block?.fields?.map((field, index) => ({
+            id: index, // field.id bhai,
+            controlName: convertControlName(field.type),
+            displayText: field?.label,
+            description: field?.information || '',
+            placeholder: field?.placeholder || '',
+            labelName: field?.label,
+            itemType: 'control',
+            icon: getIconForControl(field.type),
+            required: field?.required,
+            category: getCategoryForControl(field.type),
+            containerId: index, //field?.id,
+            name: field?.name,
+            sequence: field?.sequence,
+            ...(field?.options
+              ? {
+                  items: field.options.map((option) => ({
+                    id: option.id,
+                    value: option.value,
+                    label: option.label,
+                  })),
+                }
+              : {}),
+          })),
+        }))
+      : [],
     publishHistory: [],
     publishStatus: 'saved',
   };

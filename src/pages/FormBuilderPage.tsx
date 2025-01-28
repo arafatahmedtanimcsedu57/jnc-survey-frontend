@@ -62,7 +62,7 @@ const FormBuilderPage: React.FC<
           if (!template) throw new Error('Not found');
         } catch (ex) {
           showModalStrip('danger', 'The form id is not correct', 5000);
-          // navigate('/');
+          navigate('/');
         }
       })();
 

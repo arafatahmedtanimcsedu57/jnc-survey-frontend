@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 import { Dialog, DialogContent } from '@mui/material';
-import { json, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ConfirmationBeforePublish from './subcomponents/ConfirmationBeforePublish';
 
 import { useAppDispatch } from '../../redux/hooks';
