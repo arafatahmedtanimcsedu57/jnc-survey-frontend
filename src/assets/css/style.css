@@ -1,0 +1,63 @@
+/*Strip*/
+.modal-strip {
+  background-color: #000;
+  bottom: 0;
+  color: #ffffff;
+  left: 0;
+  padding: 20px;
+  position: fixed;
+  width: 100%;
+  display: inline-block;
+  transform: translate3d(0px, 200px, 0px);
+  transition: all 0.7s ease 0s;
+  z-index: 999 !important;
+}
+
+.modal-strip .btn,
+.modal-strip h5,
+.modal-strip h4,
+.modal-strip h3,
+.modal-strip h2,
+.modal-strip h1 {
+  margin-bottom: 0 !important;
+}
+
+.modal-strip a,
+.modal-strip a:hover,
+.modal-strip a:active,
+.modal-strip a:visited {
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.modal-strip.modal-top {
+  bottom: auto;
+  top: 0;
+  transform: translate3d(0px, -200px, 0px);
+}
+
+.modal-strip.modal-left {
+  bottom: auto;
+  top: auto;
+  left: 0;
+  right: auto;
+  width: 30%;
+  transform: none;
+}
+
+.modal-strip.modal-right {
+  transform: translate3d(0px, 0px, 0px);
+  bottom: auto;
+  top: 0;
+}
+
+.modal-strip.modal-active {
+  transform: translate3d(0px, 0px, 0px);
+}
+
+@media (max-width: 1024px) {
+  .modal-strip.modal-active .vertical-align {
+    top: 0 !important;
+    transform: translateY(0px) !important;
+  }
+}

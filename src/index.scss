@@ -1,0 +1,122 @@
+$white: #ffffff;
+$primary: #05539e;
+$enable-gradients: true;
+$gradient: linear-gradient(180deg, rgba($white, 0.3), rgba($white, 0));
+
+@import "bootstrap/scss/bootstrap";
+
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap");
+body {
+  background-color: rgb(249, 250, 255);
+  font-family: "Roboto", sans-serif;
+}
+
+// ::-webkit-scrollbar {
+//   width: 1px;
+// }
+
+// ::-webkit-scrollbar-track {
+//   box-shadow: inset 0 0 6px rgb(180, 180, 180);
+// }
+
+// ::-webkit-scrollbar-thumb {
+//   background-color: white;
+//   /* outline: 0px solid slategrey; */
+// }
+
+.playground {
+  overflow: hidden;
+  height: calc(100vh - 68px);
+}
+
+.main-container {
+  min-height: calc(100vh - 68px);
+}
+
+.text__welcome {
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  font-size: 60px;
+}
+
+.lighting-border {
+  background-image: radial-gradient(circle at 100% 100%, transparent 1px, #05539e 0, #5754ff 4px, transparent 0),
+    radial-gradient(circle at 0 100%, transparent 1px, #05539e 0, #a637d1 0, transparent 0),
+    radial-gradient(circle at 0 0, transparent 1px, #4faff4 0, #c54ff4 4px, transparent 0),
+    radial-gradient(circle at 100% 0, transparent 1px, #b84ff4 0, #4faff4 0, transparent 0),
+    linear-gradient(90deg, #05539e, #ffffff), linear-gradient(270deg, #4faff4, #ffffff),
+    linear-gradient(180deg, #ffffff, #4faff4), linear-gradient(0deg, #ffffff, #05539e);
+  background-size:
+    4px 4px,
+    4px 4px,
+    4px 4px,
+    4px 4px,
+    calc(100% - 2px) 1px,
+    calc(100% - 2px) 1px,
+    1px calc(100% - 2px),
+    1px calc(100% - 2px);
+  background-position:
+    0 0,
+    100% 0,
+    100% 100%,
+    0 100%,
+    top,
+    bottom,
+    100%,
+    0;
+  background-repeat: no-repeat;
+  animation: slideAnimation 10s linear infinite;
+}
+
+@keyframes slideAnimation {
+  0%,
+  100% {
+    background-position:
+      0 0,
+      100% 0,
+      100% 100%,
+      0 100%,
+      top,
+      bottom,
+      100%,
+      0;
+  }
+
+  25% {
+    background-position:
+      100% 0,
+      100% 0,
+      0 100%,
+      0 100%,
+      top,
+      bottom,
+      100%,
+      0;
+  }
+
+  50% {
+    background-position:
+      100% 100%,
+      100% 100%,
+      0 0,
+      0 0,
+      top,
+      bottom,
+      100%,
+      0;
+  }
+
+  75% {
+    background-position:
+      0 100%,
+      0 100%,
+      100% 0,
+      100% 0,
+      top,
+      bottom,
+      100%,
+      0;
+  }
+}
