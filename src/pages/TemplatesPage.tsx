@@ -14,15 +14,12 @@ const TemplatesPage: React.FC<PropsWithChildren<TemplatesPageProps>> = ({}) => {
     (state) => state.entities.formBuilder.allTemplates
   );
 
-  const authToken = useAppSelector((state) => state.user.access.token);
-
   const [openDialog, setOpenDialog] = useState<boolean>(false);
 
   useEffect(() => {
-    if (authToken) {
-      dispatch(getAllTemplates('GET ALL TEMPLATE'));
-    }
-  }, [authToken]);
+    dispatch(getAllTemplates('GET ALL TEMPLATE'));
+  }, []);
+  console.log(templates);
 
   return (
     <div className="container-fluid">
@@ -38,42 +35,36 @@ const TemplatesPage: React.FC<PropsWithChildren<TemplatesPageProps>> = ({}) => {
             </div>
           </div>
           <div className="d-flex flex-wrap gap-5">
-            {/* Create New */}
             <FormLayoutComponent
               template={null}
               createdFormLayout={false}
               setOpenDialog={setOpenDialog}
-            />
-
-            {authToken ? (
-              <>
-                <div className="w-100 text-center">
-                  <h6 className="text-primary">Single or multi-page forms</h6>
-                  <h3 className="text-info-emphasis fw-bolder">
-                    Discover our beautiful templates
-                  </h3>
-                  <div className="text-muted">
-                    Our collection of beautiful templates to create your own
-                    forms!
-                  </div>
+            />{' '}
+            <>
+              <div className="w-100 text-center">
+                <h6 className="text-primary">Single or multi-page forms</h6>
+                <h3 className="text-info-emphasis fw-bolder">
+                  Discover our beautiful templates
+                </h3>
+                <div className="text-muted">
+                  Our collection of beautiful templates to create your own
+                  forms!
                 </div>
-                <div className="d-flex flex-wrap gap-5 justify-content-center w-100">
-                  {templates.length ? (
-                    templates.map((template) => (
-                      <FormLayoutComponent
-                        key={template.id}
-                        template={template}
-                        createdFormLayout={true}
-                      />
-                    ))
-                  ) : (
-                    <></>
-                  )}
-                </div>
-              </>
-            ) : (
-              <></>
-            )}
+              </div>
+              <div className="d-flex flex-wrap gap-5 justify-content-center w-100">
+                {templates.length ? (
+                  templates.map((template) => (
+                    <FormLayoutComponent
+                      key={template.id}
+                      template={template}
+                      createdFormLayout={true}
+                    />
+                  ))
+                ) : (
+                  <></>
+                )}
+              </div>
+            </>
             <hr />
             {/* confirm bhai */}
             {/* {authToken ? (
