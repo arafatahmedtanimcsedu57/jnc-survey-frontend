@@ -9,64 +9,68 @@ import { publishTemplate } from '../../redux/entities/formBuilderEntity';
 import { convert } from '../../utils/convert';
 
 import {
-	FormLayoutComponentsType,
-	TemplateType,
+  FormLayoutComponentsType,
+  TemplateType,
 } from '../../types/FormTemplateTypes';
 import type { FileType } from '../../types/FileType';
+import { modifiedJsonData } from './helpers';
 
 interface SaveConfirmationDialogComponentProps {
-	openDialog: boolean;
-	setOpenDialog: (arg: boolean) => void;
-	formLayoutComponents: FormLayoutComponentsType[];
-	template: TemplateType;
-	file: FileType | null;
+  openDialog: boolean;
+  setOpenDialog: (arg: boolean) => void;
+  formLayoutComponents: FormLayoutComponentsType[];
+  template: TemplateType;
+  file: FileType | null;
 }
 
 const SaveConfirmation: React.FC<
-	PropsWithChildren<SaveConfirmationDialogComponentProps>
+  PropsWithChildren<SaveConfirmationDialogComponentProps>
 > = ({ openDialog, setOpenDialog, formLayoutComponents, template, file }) => {
-	const dispatch = useAppDispatch();
-	const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
-	const jsonData = {
-		formId: template?.formId,
-		formName: template?.formName,
-		pdf: file,
-		blocks: [...convert(formLayoutComponents).blocks],
-	};
+  const jsonData = {
+    formId: template?.formId,
+    formName: template?.formName,
+    pdf: file,
+    blocks: [...convert(formLayoutComponents).blocks],
+  };
 
-	const handleFormSubmit = async () => {
-		await dispatch(publishTemplate(jsonData));
+  const handleFormSubmit = async () => {
+    const modifiedData = modifiedJsonData(jsonData);
 
-		setOpenDialog(false);
-		navigate('/');
-	};
+    await dispatch(
+      publishTemplate({ data: modifiedData, formId: jsonData.formId })
+    );
 
-	return (
-		<>
-			<Dialog
-				open={openDialog}
-				fullWidth
-				maxWidth="lg"
-				onClose={() => setOpenDialog(false)}
-			>
-				<DialogContent className="modal-content">
-					<ConfirmationBeforePublish jsonData={jsonData} />
+    setOpenDialog(false);
+    navigate('/');
+  };
 
-					<div>
-						<p>Want to publish it ?</p>
-						<button
-							type="submit"
-							className="btn btn-sm btn-primary px-4 fw-medium"
-							onClick={() => handleFormSubmit()}
-						>
-							Publish
-						</button>
-					</div>
-				</DialogContent>
-			</Dialog>
-		</>
-	);
+  return (
+    <>
+      <Dialog
+        open={openDialog}
+        fullWidth
+        maxWidth="lg"
+        onClose={() => setOpenDialog(false)}
+      >
+        <DialogContent className="modal-content">
+          <ConfirmationBeforePublish jsonData={jsonData} />
+          <div>
+            <p>Want to publish it ?</p>
+            <button
+              type="submit"
+              className="btn btn-sm btn-primary px-4 fw-medium"
+              onClick={() => handleFormSubmit()}
+            >
+              Publish
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </>
+  );
 };
 
 export default SaveConfirmation;
