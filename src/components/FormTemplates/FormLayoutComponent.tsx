@@ -127,31 +127,16 @@ const FormLayoutComponent: React.FC<
               <h5 className="card-title text-dark-emphasis">{title}</h5>
             </div>
           </div>
-
           {description ? (
             <p className="card-text text-dark-emphasis">{description}</p>
           ) : (
             <></>
           )}
-          {!template ? (
-            <ActionSection
-              template={template}
-              setOpenDialog={setOpenDialog}
-              createdFormLayout={createdFormLayout}
-            />
-          ) : (
-            <></>
-          )}
-
-          {template ? (
-            <ActionSection
-              template={template}
-              setOpenDialog={setOpenDialog}
-              createdFormLayout={createdFormLayout}
-            />
-          ) : (
-            <></>
-          )}
+          <ActionSection
+            template={template}
+            setOpenDialog={setOpenDialog}
+            createdFormLayout={createdFormLayout}
+          />
         </div>
       </div>
     </>
