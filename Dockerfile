@@ -1,5 +1,5 @@
 # Stage 1: Build
-FROM node:22-alpine AS builder
+FROM node:18.18.0-alpine AS builder
 
 # Set the working directory
 WORKDIR /app
@@ -28,18 +28,18 @@ ENV REACT_APP_API_VERSION=${REACT_APP_API_VERSION}
 ENV REACT_APP_API_PUBLIC=${REACT_APP_API_PUBLIC}
 
 # Build the app
-RUN yarn build
+# RUN yarn build
 
 # Stage 2: Production
-FROM node:22-alpine
+FROM node:18.18.0-alpine
 
 WORKDIR /app
 
 # Copy the build files from the builder stage
-COPY --from=builder /app/build /app/build
+# COPY --from=builder /app/build /app/build
 
 # Install serve globally
-RUN npm install -g serve
+# RUN npm install -g serve
 
 # Expose port 8081
 EXPOSE 8081
