@@ -1,0 +1,27 @@
+name: Nagorik Survey Docker Build and Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install sshpass
+        run: sudo apt-get install -y sshpass
+
+      - name: Deploy via SSH
+        env:
+          SSHPASS: ${{ secrets.SSH_PASSWORD }}
+        run: |
+          sshpass -p "p3HajJ20245sWei0o9" ssh -o StrictHostKeyChecking=no -p 6070 -t alwyzon@94.177.8.118 << EOF
+            sudo su
+            pm2 stop 1
+            cd /home/alwyzon/nagorik-survey/jnc-survey-frontend
+            git pull origin master
+            yarn install
+            pm2 start 1
+          EOF
