@@ -1,14 +1,10 @@
 import React, { PropsWithChildren, useEffect, useState } from 'react';
-import { Card } from '@mui/material';
 
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { getAllTemplates } from '../redux/entities/formBuilderEntity';
 
 import NewFormDialogComponent from '../components/FormTemplates/NewFormDialogComponent';
 import FormLayoutComponent from '../components/FormTemplates/FormLayoutComponent';
-
-import Arrow from './../assets/red-arrow.png';
-import { getAllClients } from '../redux/entities/clientsEntity';
 
 interface TemplatesPageProps {}
 
@@ -17,7 +13,6 @@ const TemplatesPage: React.FC<PropsWithChildren<TemplatesPageProps>> = ({}) => {
   const templates = useAppSelector(
     (state) => state.entities.formBuilder.allTemplates
   );
-  // const clients = useAppSelector((state) => state.entities.client.allClients);
 
   const authToken = useAppSelector((state) => state.user.access.token);
 
@@ -26,7 +21,6 @@ const TemplatesPage: React.FC<PropsWithChildren<TemplatesPageProps>> = ({}) => {
   useEffect(() => {
     if (authToken) {
       dispatch(getAllTemplates('GET ALL TEMPLATE'));
-      dispatch(getAllClients('GET ALL CLIENTS'));
     }
   }, [authToken]);
 
