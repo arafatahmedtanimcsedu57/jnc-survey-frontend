@@ -4,45 +4,43 @@ FROM node:18.18.0-alpine AS builder
 # Set the working directory
 WORKDIR /app
 
-# Define build-time arguments
-ARG REACT_APP_API_ENDPOINT
-ARG REACT_APP_API_BASE_ENDPOINT
-ARG REACT_APP_API_PATH
-ARG REACT_APP_API_VERSION
-ARG REACT_APP_API_PUBLIC
-
-# Copy the package.json and yarn.lock files
+# Copy package.json and yarn.lock first to leverage Docker's cache
 COPY package.json yarn.lock ./
 
-# Install the dependencies
-RUN yarn install
+# Install dependencies
+RUN yarn install --frozen-lockfile
 
-# Copy the app files
+# Copy the rest of the application files
 COPY . .
 
-# Set environment variables for the build
-ENV REACT_APP_API_ENDPOINT=${REACT_APP_API_ENDPOINT}
-ENV REACT_APP_API_BASE_ENDPOINT=${REACT_APP_API_BASE_ENDPOINT}
-ENV REACT_APP_API_PATH=${REACT_APP_API_PATH}
-ENV REACT_APP_API_VERSION=${REACT_APP_API_VERSION}
-ENV REACT_APP_API_PUBLIC=${REACT_APP_API_PUBLIC}
+# Define build-time argument for the environment
+ARG BUILD_ENV=production
 
-# Build the app
-# RUN yarn build
+# Set environment variables based on the build environment
+# Assuming you have different environment files like .env.production, .env.staging, etc.
+RUN cp .env.$BUILD_ENV .env
+
+# Build the application based on the environment
+RUN if [ "$BUILD_ENV" = "staging" ]; then \
+      yarn run build:staging; \
+    else \
+      yarn run build; \
+    fi
 
 # Stage 2: Production
-FROM node:18.18.0-alpine
+FROM nginx:alpine
 
-WORKDIR /app
+# Set the working directory
+WORKDIR /usr/share/nginx/html
 
-# Copy the build files from the builder stage
-# COPY --from=builder /app/build /app/build
+# Remove default Nginx static resources
+RUN rm -rf ./*
 
-# Install serve globally
-# RUN npm install -g serve
+# Copy the build output from the builder stage
+COPY --from=builder /app/build .
 
-# Expose port 8081
-EXPOSE 8081
+# Expose port 80
+EXPOSE 80
 
-# Serve the build files
-CMD ["serve", "-s", "build", "-l", "8081"]
+# Start Nginx server
+CMD ["nginx", "-g", "daemon off;"]
