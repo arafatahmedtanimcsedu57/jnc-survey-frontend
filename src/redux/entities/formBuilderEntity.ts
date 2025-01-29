@@ -1,23 +1,25 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import _ from 'lodash';
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
+import _ from "lodash";
 
-import { getFromLocalStorage, saveToLocalStorage } from '../common';
+import { getFromLocalStorage, saveToLocalStorage } from "../common";
 import {
   closeCircularProgress,
   openCircularProgress,
-} from '../uireducers/progress';
+} from "../uireducers/progress";
 
-import { generateID } from '../../utils/common';
+import { generateID } from "../../utils/common";
 import convertForm, {
   responseAllSurveyConvertForm,
   responseSingleSurveyConvertForm,
-} from '../../utils/convertResponseToFormStruct';
+} from "../../utils/convertResponseToFormStruct";
 
-import apis from '../../service/Apis';
-import { Get, Post, SecureGet, SecurePost } from '../../service/axios.call';
+import apis from "../../service/Apis";
+import { Get, Post, SecureGet, SecurePost } from "../../service/axios.call";
 
-import { Form, FormRequestType } from '../../types/ResponseFormTypes';
-import { TemplateType } from '../../types/FormTemplateTypes';
+import { Form, FormRequestType } from "../../types/ResponseFormTypes";
+import { TemplateType } from "../../types/FormTemplateTypes";
+import { UserType } from "../../types/UserType";
+import { GroupType } from "../../types/GroupType";
 
 interface AddTemplateType {
   formName: string;
@@ -30,7 +32,7 @@ interface GetSingleTemplateRequest {
 }
 
 export const getAllTemplates = createAsyncThunk<TemplateType[], string>(
-  'formBuilderEntity/getAllTemplates',
+  "formBuilderEntity/getAllTemplates",
 
   async (data: string, { rejectWithValue, dispatch }) => {
     dispatch(openCircularProgress());
@@ -40,7 +42,7 @@ export const getAllTemplates = createAsyncThunk<TemplateType[], string>(
         url: `${apis.BASE_ENDPOINT}/${apis.PATH}/${apis.VERSION}/${apis.PUBLIC}/surveys/`,
       });
       const draftTemplates: TemplateType[] =
-        JSON.parse(getFromLocalStorage('templates')) || [];
+        JSON.parse(getFromLocalStorage("templates")) || [];
 
       dispatch(closeCircularProgress());
       const _data: TemplateType[] = data?.results?.map(
@@ -63,13 +65,13 @@ export const getSingleTemplate = createAsyncThunk<
   TemplateType,
   GetSingleTemplateRequest
 >(
-  'formBuilderEntity/getSingleTemplate',
+  "formBuilderEntity/getSingleTemplate",
 
   async (
     { formId, status }: GetSingleTemplateRequest,
     { rejectWithValue, dispatch }
   ) => {
-    if (status === 'saved') {
+    if (status === "saved") {
       dispatch(openCircularProgress());
 
       try {
@@ -93,7 +95,7 @@ export const getSingleTemplate = createAsyncThunk<
       dispatch(openCircularProgress());
       return await new Promise<TemplateType>((resolve, reject) => {
         const allTemplates: TemplateType[] =
-          JSON.parse(getFromLocalStorage('templates')) || [];
+          JSON.parse(getFromLocalStorage("templates")) || [];
         const singleTemplate = allTemplates.filter(
           (t) => String(t.formId) === String(formId)
         )[0];
@@ -108,31 +110,31 @@ export const getSingleTemplate = createAsyncThunk<
 );
 
 export const addTemplate = createAsyncThunk(
-  'formBuilderEntity/addTemplate',
+  "formBuilderEntity/addTemplate",
 
   async ({ formName, formId }: AddTemplateType) => {
     return await new Promise<TemplateType>((resolve) => {
       const allTemplates: TemplateType[] =
-        JSON.parse(getFromLocalStorage('templates')) || [];
+        JSON.parse(getFromLocalStorage("templates")) || [];
 
       const template: TemplateType = {
         id: generateID(),
         formName: formName,
         file: null,
         formId: Number(formId),
-        createdAt: '',
-        creator: 'Test User',
+        createdAt: "",
+        creator: "Test User",
         formLayoutComponents: [],
-        lastPublishedAt: '',
+        lastPublishedAt: "",
         publishHistory: [],
-        publishStatus: 'draft',
-        updatedAt: '',
+        publishStatus: "draft",
+        updatedAt: "",
       };
 
       allTemplates.push(template);
 
       setTimeout(() => {
-        saveToLocalStorage('templates', JSON.stringify(allTemplates));
+        saveToLocalStorage("templates", JSON.stringify(allTemplates));
         resolve(template);
       }, 1000);
     });
@@ -140,14 +142,14 @@ export const addTemplate = createAsyncThunk(
 );
 
 export const deleteTemplate = createAsyncThunk(
-  'formBuilderEntity/deleteTemplate',
+  "formBuilderEntity/deleteTemplate",
 
   async (data: string, { dispatch }) => {
     dispatch(openCircularProgress());
 
     return await new Promise<number>((resolve) => {
       const allTemplates: TemplateType[] = JSON.parse(
-        getFromLocalStorage('templates')
+        getFromLocalStorage("templates")
       );
 
       const deleteIndex = allTemplates.findIndex((t) => t.id === data);
@@ -156,7 +158,7 @@ export const deleteTemplate = createAsyncThunk(
 
       setTimeout(() => {
         dispatch(closeCircularProgress());
-        saveToLocalStorage('templates', JSON.stringify(allTemplates));
+        saveToLocalStorage("templates", JSON.stringify(allTemplates));
         resolve(deleteIndex);
       }, 600);
     });
@@ -164,13 +166,13 @@ export const deleteTemplate = createAsyncThunk(
 );
 
 export const saveTemplate = createAsyncThunk(
-  'formBuilderEntity/saveTemplate',
+  "formBuilderEntity/saveTemplate",
 
   async (data: TemplateType, { dispatch }) => {
     dispatch(openCircularProgress());
     return await new Promise<TemplateType>((resolve) => {
       const allTemplates: TemplateType[] = JSON.parse(
-        getFromLocalStorage('templates')
+        getFromLocalStorage("templates")
       );
 
       let templateIndex = allTemplates.findIndex((t) => t.id === data.id);
@@ -181,7 +183,7 @@ export const saveTemplate = createAsyncThunk(
         dispatch(closeCircularProgress());
 
         //Call API to store
-        saveToLocalStorage('templates', JSON.stringify(allTemplates));
+        saveToLocalStorage("templates", JSON.stringify(allTemplates));
         resolve(data);
       }, 1000);
     });
@@ -192,7 +194,7 @@ export const publishTemplate = createAsyncThunk<
   any,
   { data: Partial<FormRequestType>; formId: string | number }
 >(
-  'fromBuilderEntity/publishTemplate',
+  "fromBuilderEntity/publishTemplate",
 
   async (
     template: { data: Partial<FormRequestType>; formId: string | number },
@@ -220,11 +222,63 @@ export const publishTemplate = createAsyncThunk<
   }
 );
 
+export const getAllUsers = createAsyncThunk<UserType, string>(
+  "formBuilderEntity/getAllUsers",
+
+  async (data: string, { rejectWithValue, dispatch }) => {
+    dispatch(openCircularProgress());
+
+    try {
+      const { data }: any = await Get<UserType>({
+        url: `${apis.BASE_ENDPOINT}/${apis.PATH}/${apis.VERSION}/${apis.PRIVATE}/users`,
+      });
+
+      dispatch(closeCircularProgress());
+
+      return data;
+    } catch (error: any) {
+      dispatch(closeCircularProgress());
+      console.log({ error });
+
+      if (error.response && error.response.data.message)
+        return rejectWithValue(error.response.data.message);
+      else return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const getAllGroups = createAsyncThunk<GroupType, string>(
+  "formBuilderEntity/getAllGroups",
+
+  async (data: string, { rejectWithValue, dispatch }) => {
+    dispatch(openCircularProgress());
+
+    try {
+      const { data }: any = await Get<UserType>({
+        url: `${apis.BASE_ENDPOINT}/${apis.PATH}/${apis.VERSION}/${apis.PRIVATE}/groups`,
+      });
+
+      dispatch(closeCircularProgress());
+
+      return data;
+    } catch (error: any) {
+      dispatch(closeCircularProgress());
+      console.log({ error });
+
+      if (error.response && error.response.data.message)
+        return rejectWithValue(error.response.data.message);
+      else return rejectWithValue(error.message);
+    }
+  }
+);
+
 const slice = createSlice({
-  name: 'formBuilderEntity',
+  name: "formBuilderEntity",
   initialState: {
     allTemplates: [] as TemplateType[],
     selectedTemplate: null as TemplateType | null,
+    allUsers: {} as UserType,
+    allGroups: {} as GroupType,
   },
   reducers: {
     setSelectedTemplateNull: (state) => {
@@ -265,6 +319,14 @@ const slice = createSlice({
       newStateTemplates.splice(payload, 1);
 
       state.allTemplates = newStateTemplates;
+    },
+
+    [`${getAllUsers.fulfilled}`]: (state, { payload }) => {
+      state.allUsers = payload;
+    },
+
+    [`${getAllGroups.fulfilled}`]: (state, { payload }) => {
+      state.allGroups = payload;
     },
   },
 });

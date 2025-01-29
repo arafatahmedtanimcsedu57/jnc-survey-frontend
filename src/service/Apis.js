@@ -5,10 +5,11 @@ const apis = {
   PATH: process.env.REACT_APP_API_PATH,
   VERSION: process.env.REACT_APP_API_VERSION,
   PUBLIC: process.env.REACT_APP_API_PUBLIC,
-  IMAGE_PREVIEW: 'multimedia/preview-by-id',
+  PRIVATE: process.env.REACT_APP_API_PRIVATE,
+  IMAGE_PREVIEW: "multimedia/preview-by-id",
 
-  LOGIN: 'authentication',
-  PROVIDER: 'provider',
+  LOGIN: "authentication",
+  PROVIDER: "provider",
 
   REFRESH_TOKEN: `/api/v1/auth/token/refresh`,
 

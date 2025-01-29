@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -8,12 +8,19 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { userColumns } from "./constants";
-import { tempUserData } from "./tempData";
-
-const rows = tempUserData.results;
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { getAllUsers } from "../../redux/entities/formBuilderEntity";
 
 const Users = () => {
-  console.log({ rows });
+  const dispatch = useAppDispatch();
+  const allUsers = useAppSelector(
+    (state) => state.entities.formBuilder.allUsers
+  );
+
+  useEffect(() => {
+    dispatch(getAllUsers("GET ALL USERS"));
+  }, []);
+
   return (
     <div className="p-3">
       <h2>Users</h2>
@@ -22,7 +29,7 @@ const Users = () => {
         <h5 className="my-4">
           Total Users{" "}
           <span className="border border-secondary rounded-3 py-1 px-2 bg-info-subtle">
-            {tempUserData.count}
+            {allUsers?.count || 0}
           </span>
         </h5>
         <TableContainer component={Paper}>
@@ -36,7 +43,7 @@ const Users = () => {
             </TableHead>
 
             <TableBody>
-              {rows.map((row) => (
+              {allUsers?.results?.map((row) => (
                 <TableRow
                   key={row.uuid}
                   sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

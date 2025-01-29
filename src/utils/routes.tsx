@@ -5,6 +5,7 @@ import FormBuilderPage from "../pages/FormBuilderPage";
 import TemplatesPage from "../pages/TemplatesPage";
 import Error404 from "../pages/Error404";
 import Users from "../pages/Users";
+import Groups from "../pages/Groups";
 
 const routes: RouteObject[] = [
   {
@@ -28,7 +29,7 @@ const routes: RouteObject[] = [
 
       {
         path: "/groups",
-        element: <h1>Groups</h1>,
+        element: <Groups />,
       },
     ],
   },
